@@ -7,27 +7,29 @@
            [cascading.tuple Fields]))
 
 (defn- delimited
-  [field-seq delim & {:keys [classes skip-header?]}]
+  [field-seq delim & {:keys [classes skip-header? quote]}]
   (let [skip-header? (boolean skip-header?)
         field-seq    (w/fields field-seq)
         field-seq    (if (and classes (not (.isDefined field-seq)))
                        (w/fields (v/gen-nullable-vars (count classes)))
                        field-seq)]
     (if classes
-      (TextDelimited. field-seq skip-header? delim (into-array classes))
-      (TextDelimited. field-seq skip-header? delim))))
+      (TextDelimited. field-seq skip-header? delim quote (into-array classes))
+      (TextDelimited. field-seq skip-header? delim quote))))
 
 (defn hfs-delimited
-  "Creates a tap on HDFS using Cascading's TextDelimited
-   scheme. Different filesystems can be selected by using different
-   prefixes for `path`.
+  "
+  Creates a tap on HDFS using Cascading's TextDelimited
+  scheme. Different filesystems can be selected by using different
+  prefixes for `path`.
 
-  Supports keyword option for `:outfields`, `:classes` and
-  `:skip-header?`. See `cascalog.tap/hfs-tap` for more keyword
-  arguments.
+  Supports TextDelimited keyword option for `:outfields`, `:classes`,
+  `:skip-header?`, `:delimiter`, and `:quote`.
+  See `cascalog.tap/hfs-tap` for more keyword arguments.
 
-   See http://www.cascading.org/javadoc/cascading/tap/Hfs.html and
-   http://www.cascading.org/javadoc/cascading/scheme/TextDelimited.html"
+  See http://www.cascading.org/javadoc/cascading/tap/Hfs.html and
+  http://www.cascading.org/javadoc/cascading/scheme/TextDelimited.html
+  "
   [path & opts]
   (let [{:keys [outfields delimiter]} (apply array-map opts)
         scheme (apply delimited
@@ -37,16 +39,18 @@
     (apply tap/hfs-tap scheme path opts)))
 
 (defn lfs-delimited
-  "Creates a tap on the local filesystem using Cascading's
-   TextDelimited scheme. Different filesystems can be selected by
-   using different prefixes for `path`.
+  "
+  Creates a tap on the local filesystem using Cascading's
+  TextDelimited scheme. Different filesystems can be selected by
+  using different prefixes for `path`.
 
-  Supports keyword option for `:outfields`, `:classes` and
-  `:skip-header?`. See `cascalog.tap/hfs-tap` for more keyword
-  arguments.
+  Supports TextDelimited keyword option for `:outfields`, `:classes`,
+  `:skip-header?`, `:delimiter`, and `:quote`.
+  See `cascalog.tap/hfs-tap` for more keyword arguments.
 
-   See http://www.cascading.org/javadoc/cascading/tap/Hfs.html and
-   http://www.cascading.org/javadoc/cascading/scheme/TextDelimited.html"
+  See http://www.cascading.org/javadoc/cascading/tap/Hfs.html and
+  http://www.cascading.org/javadoc/cascading/scheme/TextDelimited.html
+  "
   [path & opts]
   (let [{:keys [outfields delimiter]} (apply array-map opts)
         scheme (apply delimited
