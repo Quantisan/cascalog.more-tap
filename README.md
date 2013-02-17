@@ -1,16 +1,3 @@
-# Cascalog-More-Taps
+DEPRECATED!
 
-Additional taps for Cascalog.
-
-## Available Taps
-
-- delimited files
-- writable sequence files
-
-## Usage
-
-Add the following to project.clj:
-
-```clj
-[cascalog-more-taps "0.3.0"]
-```
+This library has been moved to [Cascalog Proper](https://github.com/nathanmarz/cascalog). For continuing development, please make pull requests against the main library.
